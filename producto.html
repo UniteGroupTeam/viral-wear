@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Producto - Viral Wear</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="LOGO (ICONO PARA LUGARES PEQUEÑOS.png">
+    <link rel="apple-touch-icon" href="LOGO PNG.png">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .size-btn.selected {
+            background-color: black;
+            color: white;
+            border-color: black;
+        }
+
+        .zoom-container {
+            overflow: hidden;
+        }
+
+        .zoom-container img {
+            transition: transform 0.5s ease;
+        }
+
+        .zoom-container:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Accordion */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .accordion-content.open {
+            max-height: 500px;
+        }
+    </style>
+</head>
+
+<body class="bg-white min-h-screen text-gray-900">
+
+    <!-- Navbar Simple -->
+    <nav class="fixed w-full top-0 z-50 py-2 px-4 md:px-6 bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="flex items-center">
+                <img src="LOGO (ICONO PARA LUGARES PEQUEÑOS.png" alt="Viral Wear" class="h-10 w-auto">
+            </a>
+            <div class="flex items-center gap-4">
+                <a href="catalogo.html" class="text-sm font-medium text-gray-600 hover:text-black hidden md:block">
+                    <i class="fas fa-arrow-left mr-2"></i>Catálogo
+                </a>
+                <button onclick="toggleCart()" class="relative">
+                    <i class="fas fa-shopping-bag text-xl"></i>
+                    <span id="cart-count"
+                        class="absolute -top-1 -right-1 bg-black text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Content -->
+    <main class="max-w-6xl mx-auto px-4 pt-20 pb-16">
+        <div id="product-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+
+            <!-- Image Section -->
+            <div class="zoom-container rounded-xl overflow-hidden bg-gray-100 aspect-square relative">
+                <img id="p-image" src="" alt="Product Image" class="w-full h-full object-cover">
+                <!-- Promo Badge -->
+                <div id="promo-badge"
+                    class="absolute top-4 left-4 bg-purple-600 text-white px-3 py-1 text-sm font-bold rounded hidden">
+                    +1000 V-Bucks
+                </div>
+            </div>
+
+            <!-- Info Section -->
+            <div class="flex flex-col">
+                <!-- Category -->
+                <p id="p-category" class="text-sm text-gray-500 uppercase tracking-wider mb-2">Colección</p>
+
+                <!-- Title -->
+                <h1 id="p-title" class="text-2xl md:text-3xl font-bold mb-2">Cargando...</h1>
+
+                <!-- Price -->
+                <p id="p-price" class="text-2xl font-bold text-gray-900 mb-4">$0 MXN</p>
+
+                <!-- Short Description -->
+                <p id="p-desc" class="text-gray-600 mb-6">Descripción del producto.</p>
+
+                <!-- Size Selector -->
+                <div class="mb-6">
+                    <h3 class="font-semibold mb-3">Talla</h3>
+                    <div class="flex flex-wrap gap-2" id="sizes-container">
+                        <!-- Sizes will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Quantity & Add to Cart -->
+                <div class="flex gap-3 mb-6">
+                    <div class="flex border border-gray-300 rounded-lg items-center">
+                        <button onclick="updateQty(-1)"
+                            class="w-10 h-12 hover:bg-gray-50 text-lg font-bold text-gray-500">-</button>
+                        <span id="quantity" class="w-10 text-center font-bold">1</span>
+                        <button onclick="updateQty(1)"
+                            class="w-10 h-12 hover:bg-gray-50 text-lg font-bold text-gray-500">+</button>
+                    </div>
+                    <button onclick="addToCartCurrent()" id="add-to-cart-btn"
+                        class="flex-1 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-shopping-bag"></i> Agregar al Carrito
+                    </button>
+                </div>
+
+                <!-- Accordion: Description -->
+                <div class="border-t">
+                    <button onclick="toggleAccordion('acc-desc')"
+                        class="w-full py-4 flex justify-between items-center font-semibold">
+                        <span>Descripción y Ajuste</span>
+                        <i class="fas fa-chevron-down text-gray-400 transition-transform" id="acc-desc-icon"></i>
+                    </button>
+                    <div id="acc-desc" class="accordion-content">
+                        <div class="pb-4 text-sm text-gray-600 space-y-2" id="full-description">
+                            <!-- Full description here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion: Materials -->
+                <div class="border-t">
+                    <button onclick="toggleAccordion('acc-materials')"
+                        class="w-full py-4 flex justify-between items-center font-semibold">
+                        <span>Materiales</span>
+                        <i class="fas fa-chevron-down text-gray-400 transition-transform" id="acc-materials-icon"></i>
+                    </button>
+                    <div id="acc-materials" class="accordion-content">
+                        <div class="pb-4 text-sm text-gray-600 space-y-3" id="materials-content">
+                            <!-- Materials here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion: Care Instructions -->
+                <div class="border-t border-b">
+                    <button onclick="toggleAccordion('acc-care')"
+                        class="w-full py-4 flex justify-between items-center font-semibold">
+                        <span>Instrucciones de Cuidado</span>
+                        <i class="fas fa-chevron-down text-gray-400 transition-transform" id="acc-care-icon"></i>
+                    </button>
+                    <div id="acc-care" class="accordion-content">
+                        <div class="pb-4 text-sm text-gray-600" id="care-content">
+                            <!-- Care instructions here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div class="grid grid-cols-2 gap-3 mt-6 text-sm text-gray-500">
+                    <div class="flex items-center gap-2"><i class="fas fa-truck"></i> Envío a todo México</div>
+                    <div class="flex items-center gap-2"><i class="fas fa-shield-alt"></i> Garantía 30 días</div>
+                    <div class="flex items-center gap-2"><i class="fas fa-leaf"></i> Algodón de calidad</div>
+                    <div class="flex items-center gap-2"><i class="fas fa-lock"></i> Pago seguro</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Cart Drawer -->
+    <div id="cart-modal" class="hidden fixed inset-0 z-50">
+        <div class="absolute inset-0 bg-black/30" onclick="toggleCart()"></div>
+        <div class="cart-drawer absolute right-0 top-0 h-full w-full max-w-sm bg-white shadow-2xl flex flex-col">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h2 class="text-lg font-bold">Tu Carrito</h2>
+                <button onclick="toggleCart()"
+                    class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-full transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="cart-items" class="flex-1 overflow-y-auto p-4">
+                <p class="text-gray-500 text-center py-8">Tu carrito está vacío</p>
+            </div>
+            <div class="border-t p-4 space-y-4">
+                <div class="flex justify-between items-center font-bold text-lg">
+                    <span>Total:</span>
+                    <span id="cart-total">$0 MXN</span>
+                </div>
+                <button onclick="goToCheckout()"
+                    class="w-full py-3 bg-black text-white font-medium hover:bg-gray-800 transition flex items-center justify-center gap-2">
+                    Continuar con el pago
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATABASE DE PRODUCTOS ---
+        const products = {
+            'free-fortnite-tee': {
+                id: 'free-fortnite-tee',
+                title: 'Playera Free Fortnite "1984"',
+                price: 569,
+                category: 'Fortnite Collection · Edición Limitada',
+                shortDesc: 'Diseño icónico de la histórica batalla de Epic Games vs Apple. Inspirado en el comercial "Nineteen Eighty-Fortnite" que desafió a la manzana. Estampado DTF de alta calidad.',
+                fullDesc: 'Playera en punto ligero de algodón. Modelo con cuello acanalado redondo y bastilla recta. Corte slim ajustado que modela el cuerpo para crear una silueta entallada.',
+                sizes: ['XCH', 'CH', 'M', 'G', 'XG', 'XXG'],
+                materials: {
+                    composition: 'Algodón 95%, Elastano 5%',
+                    type: 'Algodón, Punto',
+                    printing: 'Estampado DTF (Direct to Film)',
+                    details: [
+                        { name: 'Algodón', desc: 'Fibra natural suave y versátil que se obtiene de la planta del algodón.' },
+                        { name: 'Elastano', desc: 'Fibra sintética elástica que proporciona flexibilidad y comodidad.' },
+                        { name: 'Estampado DTF', desc: 'Técnica de impresión directa sobre película que ofrece colores vibrantes, alta durabilidad y acabado premium, resistente a múltiples lavados.' }
+                    ]
+                },
+                care: [
+                    'En caso necesario, usar solo lejía sin cloro',
+                    'Planchar a temperatura media',
+                    'Lavado en lavadora a 40°',
+                    'Lavar con prendas de color parecido',
+                    'Secar colgado',
+                    'Se puede limpiar en seco'
+                ],
+                image: 'https://i.imgur.com/oU1pj76.jpeg',
+                isFortnite: true
+            }
+        };
+
+        // --- VARIABLES DE ESTADO ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id') || 'free-fortnite-tee';
+        let currentProduct = products[productId] || products['free-fortnite-tee'];
+        let selectedSize = null; // Must select size first
+        let quantity = 1;
+
+        // Update add button state
+        function updateAddButtonState() {
+            const btn = document.getElementById('add-to-cart-btn');
+            if (!selectedSize) {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btn.innerHTML = '<i class="fas fa-hand-pointer"></i> Selecciona una talla';
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.innerHTML = '<i class="fas fa-shopping-bag"></i> Agregar al Carrito';
+            }
+        }
+
+        // Cart from localStorage
+        let cart = JSON.parse(localStorage.getItem('viralWearCart')) || [];
+
+        // --- INICIALIZAR PÁGINA ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProduct();
+            updateCartUI();
+        });
+
+        function loadProduct() {
+            const p = currentProduct;
+
+            // Basic info
+            document.getElementById('p-image').src = p.image;
+            document.getElementById('p-title').innerText = p.title;
+            document.getElementById('p-price').innerText = `$${p.price.toLocaleString()} MXN`;
+            document.getElementById('p-desc').innerText = p.shortDesc;
+            document.getElementById('p-category').innerText = p.category;
+            document.title = `${p.title} - Viral Wear`;
+
+            // Promo badge for Fortnite products
+            if (p.isFortnite) {
+                document.getElementById('promo-badge').classList.remove('hidden');
+            }
+
+            // Sizes
+            const sizesContainer = document.getElementById('sizes-container');
+            sizesContainer.innerHTML = p.sizes.map((size, index) => `
+                <button class="size-btn px-4 py-2 border border-gray-300 rounded-lg font-medium hover:border-black transition ${size === selectedSize ? 'selected' : ''}"
+                    onclick="selectSize(this, '${size}')">${size}</button>
+            `).join('');
+
+            // Full description
+            document.getElementById('full-description').innerHTML = `<p>${p.fullDesc}</p>`;
+
+            // Materials
+            document.getElementById('materials-content').innerHTML = `
+                <p><strong>Composición:</strong> ${p.materials.composition}</p>
+                <p><strong>Material:</strong> ${p.materials.type}</p>
+                ${p.materials.printing ? `<p><strong>Estampado:</strong> ${p.materials.printing}</p>` : ''}
+                <div class="mt-2 space-y-2">
+                    ${p.materials.details.map(m => `
+                        <div class="bg-gray-50 p-2 rounded">
+                            <span class="font-medium">${m.name}:</span> ${m.desc}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            // Care instructions
+            document.getElementById('care-content').innerHTML = `
+                <ul class="space-y-1">
+                    ${p.care.map(c => `<li class="flex items-start gap-2"><i class="fas fa-check text-green-500 mt-1"></i> ${c}</li>`).join('')}
+                </ul>
+            `;
+
+            // Initialize button state (disabled until size selected)
+            updateAddButtonState();
+        }
+
+        function selectSize(btn, size) {
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedSize = size;
+            updateAddButtonState();
+        }
+
+        function updateQty(change) {
+            if (quantity + change >= 1 && quantity + change <= 10) {
+                quantity += change;
+                document.getElementById('quantity').innerText = quantity;
+            }
+        }
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById(id + '-icon');
+            content.classList.toggle('open');
+            icon.classList.toggle('rotate-180');
+        }
+
+        // --- CART SYSTEM ---
+        function addToCartCurrent() {
+            if (!selectedSize) {
+                alert('Por favor selecciona una talla');
+                return;
+            }
+
+            const existingIndex = cart.findIndex(item => item.name === currentProduct.title && item.size === selectedSize);
+
+            if (existingIndex > -1) {
+                cart[existingIndex].q += quantity;
+            } else {
+                cart.push({
+                    name: currentProduct.title,
+                    price: currentProduct.price,
+                    size: selectedSize,
+                    q: quantity,
+                    image: currentProduct.image
+                });
+            }
+
+            saveCart();
+            updateCartUI();
+
+            // Button feedback
+            const btn = document.getElementById('add-to-cart-btn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Agregado!';
+            btn.classList.replace('bg-black', 'bg-green-600');
+
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.classList.replace('bg-green-600', 'bg-black');
+            }, 2000);
+        }
+
+        function saveCart() {
+            localStorage.setItem('viralWearCart', JSON.stringify(cart));
+        }
+
+        function updateCartUI() {
+            const count = cart.reduce((a, b) => a + b.q, 0);
+            document.getElementById('cart-count').innerText = count;
+
+            const total = cart.reduce((a, b) => a + (b.price * b.q), 0);
+            document.getElementById('cart-total').innerText = `$${total.toLocaleString()} MXN`;
+
+            const container = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">Tu carrito está vacío</p>';
+            } else {
+                container.innerHTML = cart.map((item, index) => `
+                    <div class="flex gap-3 pb-3 mb-3 border-b">
+                        <img src="${item.image || 'https://via.placeholder.com/60'}" class="w-16 h-16 object-cover rounded">
+                        <div class="flex-1">
+                            <p class="font-medium text-sm">${item.name}</p>
+                            <p class="text-xs text-gray-500">Talla: ${item.size} · x${item.q}</p>
+                            <p class="font-semibold">$${(item.price * item.q).toLocaleString()}</p>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 self-start">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCart();
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-modal').classList.toggle('hidden');
+        }
+
+        function goToCheckout() {
+            if (cart.length === 0) {
+                alert('Tu carrito está vacío');
+                return;
+            }
+            window.location.href = 'checkout.html';
+        }
+    </script>
+</body>
+
+</html>

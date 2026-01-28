@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Viral Wear</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="LOGO (ICONO PARA LUGARES PEQUEÑOS.png">
+    <link rel="apple-touch-icon" href="LOGO PNG.png">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background-color: #fafafa;
+        }
+
+        /* Custom Radio/Checkbox Styles */
+        .custom-radio {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .custom-radio:checked {
+            border-color: #000;
+            background: #000;
+            box-shadow: inset 0 0 0 4px #fff;
+        }
+
+        .custom-checkbox {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .custom-checkbox:checked {
+            border-color: #000;
+            background: #000;
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+        }
+
+        /* Input Focus */
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #000;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900">
+
+    <!-- Navigation Simple -->
+    <nav class="fixed w-full top-0 z-50 py-3 px-4 md:px-6 bg-white shadow-sm">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="flex items-center">
+                <img src="LOGO (ICONO PARA LUGARES PEQUEÑOS.png" alt="Viral Wear" class="h-10 w-auto object-contain">
+            </a>
+            <a href="catalogo.html" class="text-sm text-gray-600 hover:text-black transition">
+                <i class="fas fa-arrow-left mr-2"></i>Volver al catálogo
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-12 px-4 md:px-6">
+        <div class="max-w-4xl mx-auto">
+
+            <!-- Page Title -->
+            <div class="text-center mb-8">
+                <h1 class="text-2xl md:text-3xl font-bold mb-2">Finalizar Compra</h1>
+                <p class="text-gray-500 text-sm">Revisa tu pedido y completa tus datos</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+
+                <!-- Left Column: Cart Items -->
+                <div class="space-y-6">
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <i class="fas fa-shopping-bag text-gray-400"></i>
+                            Tu Pedido
+                        </h2>
+
+                        <div id="checkout-items" class="space-y-4">
+                            <!-- Items will be loaded here -->
+                            <p class="text-gray-500 text-center py-8">Cargando productos...</p>
+                        </div>
+
+                        <div class="border-t mt-6 pt-4">
+                            <div class="flex justify-between items-center text-lg font-bold">
+                                <span>Subtotal:</span>
+                                <span id="checkout-subtotal">$0 MXN</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">* Envío se calcula al ingresar tu dirección</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Shipping & Payment -->
+                <div class="space-y-6">
+
+                    <!-- Shipping Info -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <i class="fas fa-truck text-gray-400"></i>
+                            Datos de Envío
+                        </h2>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
+                                <input type="text" id="customer-name" placeholder="Tu nombre"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg transition">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                                <input type="tel" id="customer-phone" placeholder="10 dígitos"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg transition">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Dirección completa</label>
+                                <textarea id="customer-address" rows="2"
+                                    placeholder="Calle, número, colonia, ciudad, estado"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg transition resize-none"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Código Postal</label>
+                                <input type="text" id="customer-zip" placeholder="00000" maxlength="5"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg transition">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                            <i class="fas fa-credit-card text-gray-400"></i>
+                            Forma de Pago
+                        </h2>
+
+                        <div class="space-y-3">
+                            <label
+                                class="flex items-center gap-3 p-4 border rounded-lg cursor-pointer hover:border-gray-400 transition">
+                                <input type="radio" name="payment" value="transferencia" class="custom-radio" checked>
+                                <div>
+                                    <span class="font-medium">Transferencia Bancaria</span>
+                                    <p class="text-xs text-gray-500">Te enviaremos los datos por WhatsApp</p>
+                                </div>
+                            </label>
+
+                            <label
+                                class="flex items-center gap-3 p-4 border rounded-lg cursor-pointer hover:border-gray-400 transition">
+                                <input type="radio" name="payment" value="efectivo" class="custom-radio">
+                                <div>
+                                    <span class="font-medium">Efectivo contra entrega</span>
+                                    <p class="text-xs text-gray-500">Paga al recibir tu pedido</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button onclick="sendToWhatsApp()" id="submit-btn"
+                        class="w-full py-4 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fab fa-whatsapp text-lg"></i>
+                        Cotizar y Enviar Pedido
+                    </button>
+
+                    <p class="text-xs text-gray-500 text-center">
+                        Al continuar, serás redirigido a WhatsApp para confirmar tu pedido con nuestro equipo.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Load cart from localStorage
+        let cart = JSON.parse(localStorage.getItem('viralWearCart')) || [];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            if (cart.length === 0) {
+                window.location.href = 'catalogo.html';
+                return;
+            }
+            renderCheckoutItems();
+        });
+
+        function renderCheckoutItems() {
+            const container = document.getElementById('checkout-items');
+            const subtotalEl = document.getElementById('checkout-subtotal');
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-8">No hay productos en tu carrito</p>';
+                subtotalEl.textContent = '$0 MXN';
+                return;
+            }
+
+            // Get quantity key (could be 'q' or 'quantity' depending on which page added it)
+            const getQuantity = (item) => item.quantity || item.q || 1;
+
+            container.innerHTML = cart.map((item, index) => `
+                <div class="flex items-start gap-4 pb-4 border-b last:border-0 last:pb-0">
+                    <input type="checkbox" class="custom-checkbox mt-1 item-checkbox" data-index="${index}" checked>
+                    <div class="flex-1">
+                        <h3 class="font-medium">${item.name}</h3>
+                        <p class="text-sm text-gray-500">Cantidad: ${getQuantity(item)}</p>
+                        ${item.size ? `<p class="text-xs text-gray-400">Talla: ${item.size}</p>` : ''}
+                    </div>
+                    <span class="font-semibold">$${(item.price * getQuantity(item)).toLocaleString()}</span>
+                </div>
+            `).join('');
+
+            // Add event listeners to checkboxes
+            document.querySelectorAll('.item-checkbox').forEach(cb => {
+                cb.addEventListener('change', updateSubtotal);
+            });
+
+            updateSubtotal();
+        }
+
+        function updateSubtotal() {
+            const subtotalEl = document.getElementById('checkout-subtotal');
+            const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+
+            let total = 0;
+            checkboxes.forEach(cb => {
+                const index = parseInt(cb.dataset.index);
+                const item = cart[index];
+                const qty = item.quantity || item.q || 1;
+                total += item.price * qty;
+            });
+
+            subtotalEl.textContent = `$${total.toLocaleString()} MXN`;
+        }
+
+        function getSelectedItems() {
+            const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+            const selectedItems = [];
+
+            checkboxes.forEach(cb => {
+                const index = parseInt(cb.dataset.index);
+                selectedItems.push(cart[index]);
+            });
+
+            return selectedItems;
+        }
+
+        function sendToWhatsApp() {
+            const name = document.getElementById('customer-name').value.trim();
+            const phone = document.getElementById('customer-phone').value.trim();
+            const address = document.getElementById('customer-address').value.trim();
+            const zip = document.getElementById('customer-zip').value.trim();
+            const payment = document.querySelector('input[name="payment"]:checked').value;
+
+            // Validation
+            if (!name) {
+                alert('Por favor ingresa tu nombre');
+                document.getElementById('customer-name').focus();
+                return;
+            }
+            if (!phone) {
+                alert('Por favor ingresa tu teléfono');
+                document.getElementById('customer-phone').focus();
+                return;
+            }
+            if (!address) {
+                alert('Por favor ingresa tu dirección');
+                document.getElementById('customer-address').focus();
+                return;
+            }
+            if (!zip) {
+                alert('Por favor ingresa tu código postal');
+                document.getElementById('customer-zip').focus();
+                return;
+            }
+
+            const selectedItems = getSelectedItems();
+            if (selectedItems.length === 0) {
+                alert('Por favor selecciona al menos un producto');
+                return;
+            }
+
+            // Build product list
+            const getQuantity = (item) => item.quantity || item.q || 1;
+            let productList = selectedItems.map(item => {
+                const qty = getQuantity(item);
+                const size = item.size ? ` (Talla: ${item.size})` : '';
+                return `• ${item.name}${size} x${qty} - $${(item.price * qty).toLocaleString()}`;
+            }).join('\n');
+
+            // Calculate total
+            const total = selectedItems.reduce((sum, item) => {
+                const qty = getQuantity(item);
+                return sum + (item.price * qty);
+            }, 0);
+
+            // Payment method text
+            const paymentText = payment === 'transferencia' ? 'Transferencia Bancaria' : 'Efectivo contra entrega';
+
+            // Build WhatsApp message
+            const message = `🛒 *NUEVO PEDIDO - VIRAL WEAR*
+
+📦 *PRODUCTOS:*
+${productList}
+
+💰 *SUBTOTAL:* $${total.toLocaleString()} MXN
+
+👤 *DATOS DEL CLIENTE:*
+• Nombre: ${name}
+• Teléfono: ${phone}
+• Dirección: ${address}
+• C.P.: ${zip}
+
+💳 *FORMA DE PAGO:* ${paymentText}
+
+Por favor confirmar disponibilidad y costo de envío. ¡Gracias!`;
+
+            // WhatsApp number
+            const whatsappNumber = '5255741235521';
+
+            // Encode message and open WhatsApp
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - Viral Wear</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="LOGO (ICONO PARA LUGARES PEQUEÑOS.png">
+    <link rel="apple-touch-icon" href="LOGO PNG.png">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Floating Elements Layer - Normal */
+        .floating-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Multiverse Layer - Subtle float animation */
+        .floating-layer.multiverse {
+            animation: float-drift 20s ease-in-out infinite;
+        }
+
+        @keyframes float-drift {
+
+            0%,
+            100% {
+                transform: scale(1.05);
+            }
+
+            50% {
+                transform: scale(1.1) translateY(-10px);
+            }
+        }
+
+        /* Cart Spin Animation */
+        .cart-icon-container:hover i {
+            transform: rotate(360deg);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        /* Mobile Menu Transitions */
+        .mobile-menu {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(100%);
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        /* Hamburger Animation */
+        .hamburger line {
+            transition: 0.3s ease-in-out;
+            transform-origin: center;
+        }
+
+        .hamburger.active line:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+
+        .hamburger.active line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active line:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+
+        /* Filter Buttons */
+        .filter-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: currentColor;
+            transition: width 0.3s ease;
+        }
+
+        .filter-btn:hover::after,
+        .filter-btn.active::after {
+            width: 100%;
+        }
+
+        /* Product Card - No background transitions to avoid flash */
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* Theme: Default (White) */
+        body.theme-default {
+            background-color: #ffffff;
+            color: #1a1a1a;
+        }
+
+        /* Theme: Fortnite */
+        body.theme-fortnite {
+            background-color: #050505;
+            color: #ffffff;
+        }
+
+        body.theme-fortnite .product-card {
+            background: rgba(25, 25, 25, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        body.theme-fortnite .product-card:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        body.theme-fortnite .filter-btn {
+            color: #fff;
+        }
+
+        body.theme-fortnite .filter-btn.active {
+            color: #999;
+        }
+
+        /* Theme: Lego - Simplified */
+        body.theme-lego {
+            background-color: #fafafa;
+            color: #1a1a1a;
+        }
+
+        body.theme-lego .product-card {
+            border: 1px solid #e5e5e5;
+            background: white;
+        }
+
+        body.theme-lego .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Theme: Search - Simplified */
+        body.theme-search {
+            background-color: #111111;
+            color: white;
+        }
+
+        body.theme-search .product-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+            color: white;
+        }
+
+        body.theme-search .product-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-5px);
+        }
+
+        /* Add to Cart Button - Consistent Black */
+        .btn-add {
+            transition: all 0.3s ease;
+            background: black;
+            color: white;
+        }
+
+        .btn-add:hover {
+            background: #333;
+        }
+
+        body.theme-fortnite .btn-add,
+        body.theme-search .btn-add {
+            background: white;
+            color: black;
+        }
+
+        body.theme-fortnite .btn-add:hover,
+        body.theme-search .btn-add:hover {
+            background: #eee;
+        }
+
+        /* Animation Keyframes */
+        @keyframes float-up {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .animate-float {
+            animation: float-up 6s ease-in-out infinite;
+        }
+
+        /* Grid Transition */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-item {
+            transition: all 0.5s ease;
+        }
+
+        .product-item.hidden {
+            display: none;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        .product-item.visible {
+            display: block;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Cart Badge */
+        .cart-badge {
+            transition: transform 0.2s;
+        }
+
+        .cart-badge.bump {
+            transform: scale(1.3);
+        }
+    </style>
+</head>
+
+<body class="theme-default min-h-screen relative overflow-x-hidden">
+
+    <!-- Floating Background Layers -->
+    <!-- Fortnite Layer -->
+    <div id="layer-fortnite" class="floating-layer fixed inset-0 pointer-events-none z-0"
+        style="background-image: url('fortnite background.jpeg'); opacity: 0; background-size: cover; background-position: 30% center;">
+        <div class="absolute inset-0 bg-black/50"></div>
+    </div>
+
+    <!-- Lego Layer -->
+    <div id="layer-lego" class="floating-layer fixed inset-0 pointer-events-none mix-blend-multiply z-0"
+        style="background-image: url('https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=1920&q=80'); opacity: 0;">
+    </div>
+
+    <!-- Multiverse Layer (For Search) -->
+    <div id="layer-search" class="floating-layer multiverse fixed inset-0 pointer-events-none mix-blend-normal z-0"
+        style="background-image: url('https://i.imgur.com/LVissH0.png'); opacity: 0; background-position: center;">
+    </div>
+
+    <!-- Navigation Compacto - Siempre con colores oscuros -->
+    <nav class="fixed w-full top-0 z-50 py-2 px-4 md:px-6 bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+
+            <!-- Logo Compacto (Icono) -->
+            <a href="index.html" class="flex items-center">
+                <img src="LOGO (ICONO PARA LUGARES PEQUEÑOS.png" alt="Viral Wear" class="h-10 w-auto object-contain">
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8 items-center text-sm text-gray-900">
+                <a href="index.html"
+                    class="font-medium hover:text-gray-600 transition uppercase tracking-wider">Inicio</a>
+                <a href="catalogo.html" class="font-medium transition uppercase tracking-wider">Catálogo</a>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="flex items-center gap-4 text-gray-900">
+                <!-- Cart -->
+                <button onclick="toggleCart()" class="cart-icon-container relative group">
+                    <i class="fas fa-shopping-bag text-xl hover:text-gray-600 transition"></i>
+                    <span id="cart-count"
+                        class="cart-badge absolute -top-1 -right-1 bg-black text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+                </button>
+
+                <!-- Hamburger -->
+                <button class="md:hidden z-50 relative focus:outline-none" onclick="toggleMobileMenu()">
+                    <svg class="hamburger w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="4" y1="6" x2="20" y2="6"></line>
+                        <line x1="4" y1="12" x2="20" y2="12"></line>
+                        <line x1="4" y1="18" x2="20" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu"
+            class="mobile-menu fixed inset-0 bg-white z-40 flex flex-col items-center justify-center space-y-8 text-2xl font-bold md:hidden text-gray-900">
+            <a href="index.html" onclick="toggleMobileMenu()" class="hover:text-gray-500">Inicio</a>
+            <a href="catalogo.html" onclick="toggleMobileMenu()" class="hover:text-gray-500">Catálogo</a>
+            <button onclick="toggleMobileMenu(); toggleCart()" class="hover:text-gray-500">Carrito</button>
+        </div>
+    </nav>
+
+    <!-- Header & Filters -->
+    <header class="pt-24 pb-6 px-4 md:px-6 relative z-10 transition-all duration-500" id="catalog-header">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-3xl md:text-5xl font-bold mb-6 tracking-tight">CATÁLOGO</h1>
+
+            <!-- Universal Search Bar -->
+            <div class="max-w-xl mx-auto mb-8 relative">
+                <input type="text" id="search-input" placeholder="Buscar en el multiverso..."
+                    class="w-full px-6 py-4 rounded-full border-2 border-gray-200 bg-white/80 backdrop-blur text-gray-900 text-lg focus:outline-none focus:border-black transition-all shadow-lg"
+                    oninput="handleSearch(this.value)">
+                <i class="fas fa-search absolute right-6 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="flex flex-wrap justify-center gap-8 text-lg font-medium mb-8">
+                <button onclick="setCategory('all')" class="filter-btn active px-4 py-2"
+                    data-category-btn="all">TODOS</button>
+                <button onclick="setCategory('fortnite')" class="filter-btn px-4 py-2"
+                    data-category-btn="fortnite">FORTNITE</button>
+                <button onclick="setCategory('lego')" class="filter-btn px-4 py-2"
+                    data-category-btn="lego">LEGO</button>
+            </div>
+
+            <!-- Advanced Filters (Price & Size) -->
+            <div class="flex flex-wrap justify-center gap-4 text-sm opacity-80">
+                <select id="size-filter" onchange="runFilters()"
+                    class="px-4 py-2 rounded-lg bg-white/50 border border-gray-200 text-gray-800 focus:outline-none cursor-pointer">
+                    <option value="all">Todas las Tallas</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                </select>
+
+                <select id="price-filter" onchange="runFilters()"
+                    class="px-4 py-2 rounded-lg bg-white/50 border border-gray-200 text-gray-800 focus:outline-none cursor-pointer">
+                    <option value="all">Cualquier Precio</option>
+                    <option value="0-600">Menos de $600</option>
+                    <option value="600-1000">$600 - $1,000</option>
+                    <option value="1000+">Más de $1,000</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- Promo Banner for Fortnite -->
+    <div id="promo-banner"
+        class="hidden bg-gradient-to-r from-purple-600 via-blue-600 to-purple-600 text-white py-3 px-4 text-center text-sm fixed top-14 left-0 right-0 z-40 shadow-lg">
+        <div class="max-w-4xl mx-auto flex items-center justify-center gap-2">
+            <i class="fas fa-gift animate-pulse"></i>
+            <span><strong>PROMO FORTNITE:</strong> Compra cualquier producto Fortnite y recibe una cuenta con
+                <strong>1,000 V-Bucks</strong> para regalarte skins en el juego</span>
+            <button onclick="document.getElementById('promo-banner').classList.add('hidden')"
+                class="ml-4 hover:text-gray-200">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Product Grid -->
+    <main class="max-w-7xl mx-auto px-6 pb-24 relative z-10">
+        <div class="products-grid" id="grid">
+
+            <!-- PRODUCTO 1: Free Fortnite Tee -->
+            <div class="product-item" data-category="fortnite" data-price="569" data-name="playera free fortnite 1984">
+                <a href="producto.html?id=free-fortnite-tee" class="block">
+                    <div class="product-card rounded-xl overflow-hidden p-4 relative group">
+                        <!-- Badge Promo -->
+                        <div
+                            class="absolute top-6 left-6 z-10 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded">
+                            +1000 V-Bucks
+                        </div>
+                        <div class="h-72 overflow-hidden rounded-lg mb-4 bg-gray-900">
+                            <img src="https://i.imgur.com/oU1pj76.jpeg"
+                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                alt="Playera Free Fortnite 1984" loading="lazy">
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-1">Playera Free Fortnite "1984"</h3>
+                            <p class="opacity-70 text-sm mb-3">Edición Limitada · La Revolución</p>
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-xl">$569</span>
+                                <button onclick="event.preventDefault(); addToCart('Playera Free Fortnite 1984', 569)"
+                                    class="btn-add w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Mensaje de próximamente para más productos -->
+            <div class="product-item col-span-full md:col-span-2 lg:col-span-3" data-category="all" data-price="0"
+                data-name="">
+                <div class="bg-gray-100 rounded-xl p-8 text-center">
+                    <i class="fas fa-box-open text-4xl text-gray-400 mb-4"></i>
+                    <h3 class="font-bold text-lg text-gray-600 mb-2">Más productos próximamente</h3>
+                    <p class="text-gray-500 text-sm">Estamos preparando nuevos diseños exclusivos para ti</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Cart Drawer (Slide from right) -->
+    <div id="cart-modal" class="hidden fixed inset-0 z-50">
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-black/30" onclick="toggleCart()"></div>
+
+        <!-- Drawer -->
+        <div class="cart-drawer absolute right-0 top-0 h-full w-full max-w-sm bg-white shadow-2xl flex flex-col">
+            <!-- Header -->
+            <div class="p-4 border-b flex justify-between items-center">
+                <h2 class="text-lg font-bold">Tu Carrito</h2>
+                <button onclick="toggleCart()"
+                    class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-full transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Items -->
+            <div id="cart-items-container" class="flex-1 overflow-y-auto p-4">
+                <p class="text-gray-500 text-center py-8">Tu carrito está vacío</p>
+            </div>
+
+            <!-- Footer -->
+            <div class="border-t p-4 space-y-4">
+                <div class="flex justify-between items-center font-bold text-lg">
+                    <span>Total:</span>
+                    <span id="cart-total">$0 MXN</span>
+                </div>
+                <button onclick="goToCheckout()"
+                    class="w-full py-3 bg-black text-white font-medium hover:bg-gray-800 transition flex items-center justify-center gap-2">
+                    Continuar con el pago
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        // --- State Management ---
+        let state = {
+            category: 'all',
+            search: '',
+            size: 'all',
+            priceRange: 'all'
+        };
+
+        const body = document.body;
+        const layerLego = document.getElementById('layer-lego');
+        const layerFortnite = document.getElementById('layer-fortnite');
+        const layerSearch = document.getElementById('layer-search');
+
+        // --- Filtering Logic ---
+        function setCategory(category) {
+            state.category = category;
+
+            // UI Updates
+            document.querySelectorAll('[data-category-btn]').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.categoryBtn === category);
+            });
+
+            runFilters();
+            updateTheme();
+        }
+
+        function handleSearch(value) {
+            state.search = value.toLowerCase();
+            runFilters();
+            updateTheme();
+        }
+
+        function runFilters() {
+            state.size = document.getElementById('size-filter').value;
+            state.priceRange = document.getElementById('price-filter').value;
+
+            const items = document.querySelectorAll('.product-item');
+
+            items.forEach(item => {
+                const itemCat = item.dataset.category;
+                const itemName = item.dataset.name;
+                const itemPrice = parseInt(item.dataset.price);
+
+                // Logic Checks
+                const matchCategory = state.category === 'all' || itemCat === state.category;
+                const matchSearch = itemName.includes(state.search);
+                const matchPrice = checkPrice(itemPrice, state.priceRange);
+                // Size is currently simulated as all products have all sizes for this demo
+                const matchSize = true;
+
+                if (matchCategory && matchSearch && matchPrice && matchSize) {
+                    item.classList.remove('hidden');
+                    item.classList.add('visible');
+                } else {
+                    item.classList.remove('visible');
+                    item.classList.add('hidden');
+                }
+            });
+        }
+
+        function checkPrice(price, range) {
+            if (range === 'all') return true;
+            if (range === '0-600') return price < 600;
+            if (range === '600-1000') return price >= 600 && price <= 1000;
+            if (range === '1000+') return price > 1000;
+            return true;
+        }
+
+        function updateTheme() {
+            const promoBanner = document.getElementById('promo-banner');
+
+            // Priority: Search > Category
+            if (state.search.length > 0) {
+                body.className = 'min-h-screen relative overflow-x-hidden theme-search bg-gray-900';
+                layerLego.style.opacity = '0';
+                layerFortnite.style.opacity = '0';
+                layerSearch.style.opacity = '0.4';
+                if (promoBanner) promoBanner.classList.add('hidden');
+            } else {
+                // Set theme based on category
+                if (state.category === 'fortnite') {
+                    body.className = 'min-h-screen relative overflow-x-hidden theme-fortnite';
+                    layerFortnite.style.opacity = '0.7';
+                    layerLego.style.opacity = '0';
+                    if (promoBanner) promoBanner.classList.remove('hidden');
+                } else if (state.category === 'lego') {
+                    body.className = 'min-h-screen relative overflow-x-hidden theme-lego';
+                    layerLego.style.opacity = '0.1';
+                    layerFortnite.style.opacity = '0';
+                    if (promoBanner) promoBanner.classList.add('hidden');
+                } else {
+                    body.className = 'min-h-screen relative overflow-x-hidden theme-default';
+                    layerLego.style.opacity = '0';
+                    layerFortnite.style.opacity = '0';
+                    if (promoBanner) promoBanner.classList.add('hidden');
+                }
+                layerSearch.style.opacity = '0';
+            }
+        }
+
+        // --- Cart Logic (Persistent) ---
+        let cart = JSON.parse(localStorage.getItem('viralWearCart')) || [];
+
+        // Init Cart UI on load
+        document.addEventListener('DOMContentLoaded', updateCartUI);
+
+        function addToCart(name, price) {
+            const existing = cart.find(i => i.name === name);
+            if (existing) existing.q++;
+            else cart.push({ name, price, q: 1 });
+
+            saveCart();
+            updateCartUI();
+
+            const badge = document.getElementById('cart-count');
+            badge.classList.add('bump');
+            setTimeout(() => badge.classList.remove('bump'), 200);
+        }
+
+        function saveCart() {
+            localStorage.setItem('viralWearCart', JSON.stringify(cart));
+        }
+
+        function updateCartUI() {
+            const count = cart.reduce((a, b) => a + b.q, 0);
+            if (document.getElementById('cart-count')) document.getElementById('cart-count').innerText = count;
+
+            const total = cart.reduce((a, b) => a + (b.price * b.q), 0);
+            if (document.getElementById('cart-total')) document.getElementById('cart-total').innerText = `$${total.toLocaleString()}`;
+
+            const container = document.getElementById('cart-items-container');
+            if (container) {
+                if (cart.length === 0) {
+                    container.innerHTML = '<p class="text-gray-500 text-center py-4">Tu carrito está vacío.</p>';
+                } else {
+                    container.innerHTML = cart.map((item, index) => `
+                        <div class="flex justify-between items-center mb-2 text-gray-800 border-b pb-2">
+                            <div>
+                                <span class="block font-medium">${item.name}</span>
+                                <span class="text-sm text-gray-500">x${item.q} ${item.size ? `(${item.size})` : ''}</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="font-semibold">$${(item.price * item.q).toLocaleString()}</span>
+                                <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCart();
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            const modal = document.getElementById('cart-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function goToCheckout() {
+            if (cart.length === 0) {
+                alert('Tu carrito está vacío');
+                return;
+            }
+            window.location.href = 'checkout.html';
+        }
+
+        // Mobile Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const hamburger = document.querySelector('.hamburger');
+            if (menu && hamburger) {
+                menu.classList.toggle('open');
+                hamburger.classList.toggle('active');
+                document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : 'auto';
+            }
+        }
+    </script>
+</body>
+
+</html>
