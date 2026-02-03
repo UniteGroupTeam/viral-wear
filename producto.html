@@ -210,6 +210,14 @@
                 </div>
             </div>
         </div>
+
+        <!-- Related Products Section -->
+        <div class="mt-24 border-t pt-12">
+            <h3 class="text-2xl font-bold mb-8 text-center md:text-left">Productos que combinan</h3>
+            <div id="related-products" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Loaded dynamically -->
+            </div>
+        </div>
     </main>
 
     <!-- Cart Drawer -->
@@ -324,6 +332,76 @@
                     { name: 'Toxic Zone Green', hex: '#15803d', image: 'https://i.imgur.com/E0u2G2Z.jpeg' },
                     { name: 'Desert Storm', hex: '#e5e7eb', image: 'https://i.imgur.com/0Hen2Fl.jpeg' }
                 ],
+                isFortnite: true
+            },
+            'fortnite-midnight-ops': {
+                id: 'fortnite-midnight-ops',
+                title: 'Sudadera Fortnite "Midnight Ops"',
+                price: 863,
+                category: 'Fortnite Collection · Dark Series',
+                shortDesc: 'Edición de Oscuridad. Sudadera premium con escudo táctico. Nota: El tamaño del escudo puede variar ligeramente dependiendo de la talla, manteniendo la proporción del modelo.',
+                fullDesc: 'Domina las sombras con esta sudadera de la serie Oscuridad. Confeccionada en French Terry de alto gramaje para máxima durabilidad. Incluye gorro forrado, corte relajado y acabados premium. El escudo frontal es el protagonista de este diseño táctico.',
+                sizes: ['XCH', 'CH', 'M', 'G', 'XG', 'XXG'],
+                materials: {
+                    composition: 'Capa exterior: Algodón 60%, Poliéster 40% · Elástico: Algodón 95%, Elastano 5%',
+                    type: 'French Terry Premium',
+                    printing: 'Estampado Alta Definición',
+                    details: [
+                        { name: 'Algodón', desc: 'Fibra natural suave y versátil.' },
+                        { name: 'Poliéster Reciclado', desc: 'Contiene al menos 9% de poliéster reciclado.' },
+                        { name: 'Escudo', desc: 'Aplicación de alta resistencia.' }
+                    ]
+                },
+                care: [
+                    'Lavado en lavadora volteada',
+                    'Planchar a temperatura media (Evitar logo directamente)',
+                    'Secadora a temperatura media',
+                    'En caso necesario, usar solo lejía sin cloro',
+                    'No limpiar en seco',
+                    'Lavar con prendas de color parecido'
+                ],
+                image: 'https://imgur.com/W9uTZEr.jpeg',
+                images: [
+                    'https://imgur.com/W9uTZEr.jpeg',
+                    'https://imgur.com/v1fsyRj.jpeg',
+                    'https://imgur.com/0X8fp5n.jpeg'
+                ],
+                relatedId: 'fortnite-solar-flare', // Vinculado con la del bien
+                isFortnite: true
+            },
+            'fortnite-solar-flare': {
+                id: 'fortnite-solar-flare',
+                title: 'Sudadera Fortnite "Solar Flare"',
+                price: 863,
+                category: 'Fortnite Collection · Light Series',
+                shortDesc: 'Edición del Bien. Sudadera premium con escudo radiante. Nota: El tamaño del escudo puede variar ligeramente dependiendo de la talla, manteniendo la proporción del modelo.',
+                fullDesc: 'Ilumina el campo de batalla con la serie Luz. French Terry suave al tacto pero resistente para el día a día. Diseño limpio con gorro ajustable y corte moderno. El escudo simboliza la victoria.',
+                sizes: ['XCH', 'CH', 'M', 'G', 'XG', 'XXG'],
+                materials: {
+                    composition: 'Capa exterior: Algodón 60%, Poliéster 40% · Elástico: Algodón 95%, Elastano 5%',
+                    type: 'French Terry Premium',
+                    printing: 'Estampado Alta Definición',
+                    details: [
+                        { name: 'Algodón', desc: 'Fibra natural suave y versátil.' },
+                        { name: 'Poliéster Reciclado', desc: 'Contiene al menos 9% de poliéster reciclado.' },
+                        { name: 'Escudo', desc: 'Aplicación de alta resistencia.' }
+                    ]
+                },
+                care: [
+                    'Lavado en lavadora volteada',
+                    'Planchar a temperatura media (Evitar logo directamente)',
+                    'Secadora a temperatura media',
+                    'En caso necesario, usar solo lejía sin cloro',
+                    'No limpiar en seco',
+                    'Lavar con prendas de color parecido'
+                ],
+                image: 'https://imgur.com/FliPQ1W.jpeg',
+                images: [
+                    'https://imgur.com/FliPQ1W.jpeg',
+                    'https://imgur.com/KqFSCQH.jpeg',
+                    'https://imgur.com/LqVJINw.jpeg'
+                ],
+                relatedId: 'fortnite-midnight-ops', // Vinculado con la oscura
                 isFortnite: true
             }
         };
@@ -447,6 +525,44 @@
 
             // Initialize button state (disabled until size selected)
             updateAddButtonState();
+
+            // Load Related Products
+            loadRelatedProducts(p);
+        }
+
+        function loadRelatedProducts(p) {
+            const container = document.getElementById('related-products');
+            if (!container) return;
+
+            let related = [];
+
+            // 1. Add Specially Related (The Aura Duo)
+            if (p.relatedId && products[p.relatedId]) {
+                const partner = products[p.relatedId];
+                related.push({ ...partner, special: true }); // Tag as special
+            }
+
+            // 2. Fill with Random others
+            const allProducts = Object.values(products);
+            const others = allProducts.filter(prod => prod.id !== p.id && (!p.relatedId || prod.id !== p.relatedId));
+
+            // Shuffle simple
+            others.sort(() => 0.5 - Math.random());
+
+            // Fill
+            related = related.concat(others.slice(0, 4 - related.length));
+
+            container.innerHTML = related.map(prod => `
+                <a href="?id=${prod.id}" class="block group">
+                    <div class="relative rounded-xl overflow-hidden mb-3 bg-gray-100 aspect-[3/4] transition-all hover:shadow-lg ${prod.special ? 'ring-2 ring-purple-500/50 shadow-[0_0_20px_rgba(168,85,247,0.3)]' : ''}">
+                         ${prod.special ? '<div class="absolute inset-0 bg-purple-500/10 pointer-events-none mix-blend-overlay"></div>' : ''}
+                        <img src="${prod.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        ${prod.special ? '<span class="absolute top-2 right-2 bg-black/80 text-white text-[10px] uppercase font-bold px-2 py-1 rounded backdrop-blur max-w-fit"><i class="fas fa-bolt text-yellow-400"></i> Combo</span>' : ''}
+                    </div>
+                    <h4 class="font-bold text-sm truncate">${prod.title}</h4>
+                    <p class="text-xs text-gray-500">$${prod.price.toLocaleString()}</p>
+                </a>
+            `).join('');
         }
 
         function changeImage(element, src) {
