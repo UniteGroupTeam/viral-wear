@@ -294,6 +294,18 @@
 
 <body class="theme-default min-h-screen relative overflow-x-hidden">
 
+    <!-- Mobile Menu Overlay (Moved to Body for better positioning) -->
+    <div id="mobile-menu"
+        class="mobile-menu fixed inset-0 bg-white z-[60] flex flex-col items-center justify-center space-y-8 text-2xl font-bold md:hidden text-gray-900 shadow-xl">
+        <a href="index.html" onclick="toggleMobileMenu()" class="hover:text-gray-500">Inicio</a>
+        <a href="catalogo.html" onclick="toggleMobileMenu()" class="hover:text-gray-500">Catálogo</a>
+        <button onclick="toggleMobileMenu(); toggleCart()" class="hover:text-gray-500">Carrito</button>
+        <!-- Close Button inside Menu -->
+        <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 p-2">
+            <i class="fas fa-times text-2xl"></i>
+        </button>
+    </div>
+
     <!-- Floating Background Layers -->
     <!-- Fortnite Layer -->
     <div id="layer-fortnite" class="floating-layer fixed inset-0 pointer-events-none z-0"
@@ -348,13 +360,7 @@
             </div>
         </div>
 
-        <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu"
-            class="mobile-menu fixed inset-0 bg-white z-40 flex flex-col items-center justify-center space-y-8 text-2xl font-bold md:hidden text-gray-900">
-            <a href="index.html" onclick="toggleMobileMenu()" class="hover:text-gray-500">Inicio</a>
-            <a href="catalogo.html" onclick="toggleMobileMenu()" class="hover:text-gray-500">Catálogo</a>
-            <button onclick="toggleMobileMenu(); toggleCart()" class="hover:text-gray-500">Carrito</button>
-        </div>
+
     </nav>
 
     <!-- Header & Filters -->
@@ -430,7 +436,7 @@
                             +1000 V-Bucks
                         </div>
                         <div class="h-72 overflow-hidden rounded-lg mb-4 bg-gray-900">
-                            <img src="https://i.imgur.com/oU1pj76.jpeg"
+                            <img src="https://imgur.com/GSfoU0R.jpeg"
                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                 alt="Playera Free Fortnite 1984" loading="lazy">
                         </div>
@@ -442,6 +448,37 @@
                                 <button onclick="event.preventDefault(); addToCart('Playera Free Fortnite 1984', 569)"
                                     class="btn-add w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95">
                                     <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- PRODUCTO 2: Sudadera Fortnite Victory Black -->
+            <div class="product-item" data-category="fortnite" data-price="849"
+                data-name="sudadera fortnite victory black">
+                <a href="producto.html?id=fortnite-victory-black" class="block">
+                    <div class="product-card rounded-xl overflow-hidden p-4 relative group">
+                        <!-- Badge Promo -->
+                        <div
+                            class="absolute top-6 left-6 z-10 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded">
+                            +1000 V-Bucks
+                        </div>
+                        <div class="h-72 overflow-hidden rounded-lg mb-4 bg-gray-900">
+                            <img src="https://imgur.com/xtyGCW8.jpeg"
+                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                alt="Sudadera Fortnite Victory Black" loading="lazy">
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-1">Sudadera Fortnite "Victory Black"</h3>
+                            <p class="opacity-70 text-sm mb-3">Premium Fleece · Comfort</p>
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-xl">$849</span>
+                                <button
+                                    onclick="event.preventDefault(); window.location.href='producto.html?id=fortnite-victory-black'"
+                                    class="btn-add w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95">
+                                    <i class="fas fa-eye"></i>
                                 </button>
                             </div>
                         </div>
@@ -608,8 +645,11 @@
 
         function addToCart(name, price) {
             const existing = cart.find(i => i.name === name);
-            if (existing) existing.q++;
-            else cart.push({ name, price, q: 1 });
+            if (existing) {
+                existing.quantity = (existing.quantity || existing.q || 0) + 1;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
 
             saveCart();
             updateCartUI();
@@ -624,11 +664,21 @@
         }
 
         function updateCartUI() {
-            const count = cart.reduce((a, b) => a + b.q, 0);
+            // Normalize old 'q' to 'quantity'
+            cart = cart.map(item => ({ ...item, quantity: item.quantity || item.q || 0 }));
+            // Filter out items with invalid prices/quantities
+            cart = cart.filter(item => item.price && item.quantity > 0);
+
+            const count = cart.reduce((a, b) => a + (parseInt(b.quantity) || 0), 0);
             if (document.getElementById('cart-count')) document.getElementById('cart-count').innerText = count;
 
-            const total = cart.reduce((a, b) => a + (b.price * b.q), 0);
-            if (document.getElementById('cart-total')) document.getElementById('cart-total').innerText = `$${total.toLocaleString()}`;
+            const total = cart.reduce((a, b) => {
+                const price = parseFloat(b.price) || 0;
+                const qty = parseInt(b.quantity) || 0;
+                return a + (price * qty);
+            }, 0);
+
+            if (document.getElementById('cart-total')) document.getElementById('cart-total').innerText = `$${total.toLocaleString()} MXN`;
 
             const container = document.getElementById('cart-items-container');
             if (container) {
@@ -639,10 +689,10 @@
                         <div class="flex justify-between items-center mb-2 text-gray-800 border-b pb-2">
                             <div>
                                 <span class="block font-medium">${item.name}</span>
-                                <span class="text-sm text-gray-500">x${item.q} ${item.size ? `(${item.size})` : ''}</span>
+                                <span class="text-sm text-gray-500">x${item.quantity} ${item.size ? `(${item.size})` : ''}</span>
                             </div>
                             <div class="flex items-center gap-3">
-                                <span class="font-semibold">$${(item.price * item.q).toLocaleString()}</span>
+                                <span class="font-semibold">$${(item.price * item.quantity).toLocaleString()}</span>
                                 <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>

@@ -186,8 +186,8 @@
                                 class="flex items-center gap-3 p-4 border rounded-lg cursor-pointer hover:border-gray-400 transition">
                                 <input type="radio" name="payment" value="efectivo" class="custom-radio">
                                 <div>
-                                    <span class="font-medium">Efectivo contra entrega</span>
-                                    <p class="text-xs text-gray-500">Paga al recibir tu pedido</p>
+                                    <span class="font-medium">Depósitos OXXO o en cualquier otro lugar</span>
+                                    <p class="text-xs text-gray-500">Paga en tu tienda de conveniencia más cercana</p>
                                 </div>
                             </label>
                         </div>
@@ -214,6 +214,13 @@
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', () => {
+            // Normalize & Filter
+            cart = cart.map(item => ({ ...item, quantity: item.quantity || item.q || 0 }));
+            cart = cart.filter(item => item.price && item.quantity > 0);
+
+            // Save normalized cart back to storage
+            localStorage.setItem('viralWearCart', JSON.stringify(cart));
+
             if (cart.length === 0) {
                 window.location.href = 'catalogo.html';
                 return;
@@ -231,8 +238,8 @@
                 return;
             }
 
-            // Get quantity key (could be 'q' or 'quantity' depending on which page added it)
-            const getQuantity = (item) => item.quantity || item.q || 1;
+            // Get quantity (normalized)
+            const getQuantity = (item) => item.quantity;
 
             container.innerHTML = cart.map((item, index) => `
                 <div class="flex items-start gap-4 pb-4 border-b last:border-0 last:pb-0">
@@ -262,8 +269,7 @@
             checkboxes.forEach(cb => {
                 const index = parseInt(cb.dataset.index);
                 const item = cart[index];
-                const qty = item.quantity || item.q || 1;
-                total += item.price * qty;
+                total += item.price * (item.quantity || 1);
             });
 
             subtotalEl.textContent = `$${total.toLocaleString()} MXN`;
@@ -317,21 +323,22 @@
             }
 
             // Build product list
-            const getQuantity = (item) => item.quantity || item.q || 1;
+            // Build product list
             let productList = selectedItems.map(item => {
-                const qty = getQuantity(item);
+                const qty = item.quantity || 1;
                 const size = item.size ? ` (Talla: ${item.size})` : '';
                 return `• ${item.name}${size} x${qty} - $${(item.price * qty).toLocaleString()}`;
             }).join('\n');
 
             // Calculate total
             const total = selectedItems.reduce((sum, item) => {
-                const qty = getQuantity(item);
+                const qty = item.quantity || 1;
                 return sum + (item.price * qty);
             }, 0);
 
             // Payment method text
-            const paymentText = payment === 'transferencia' ? 'Transferencia Bancaria' : 'Efectivo contra entrega';
+            // Payment method text
+            const paymentText = payment === 'transferencia' ? 'Transferencia Bancaria' : 'Depósitos OXXO o en cualquier otro lugar';
 
             // Build WhatsApp message
             const message = `🛒 *NUEVO PEDIDO - VIRAL WEAR*
@@ -352,7 +359,7 @@ ${productList}
 Por favor confirmar disponibilidad y costo de envío. ¡Gracias!`;
 
             // WhatsApp number
-            const whatsappNumber = '5255741235521';
+            const whatsappNumber = '525574123521';
 
             // Encode message and open WhatsApp
             const encodedMessage = encodeURIComponent(message);

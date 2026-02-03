@@ -360,6 +360,18 @@
 
 <body class="bg-white text-gray-900 font-sans selection:bg-gray-200">
 
+    <!-- Mobile Menu Overlay (Moved to Body for complete coverage) -->
+    <div id="mobile-menu"
+        class="mobile-menu fixed inset-0 bg-white z-[60] flex flex-col items-center justify-center space-y-8 text-2xl font-bold md:hidden shadow-xl">
+        <a href="#hero" onclick="toggleMobileMenu()" class="hover:text-gray-500">Inicio</a>
+        <a href="#about" onclick="toggleMobileMenu()" class="hover:text-gray-500">Nosotros</a>
+        <a href="catalogo.html" onclick="toggleMobileMenu()" class="hover:text-gray-500">Catálogo</a>
+        <!-- Close Button inside Menu -->
+        <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 p-2">
+            <i class="fas fa-times text-2xl"></i>
+        </button>
+    </div>
+
     <!-- Navbar Compacto -->
     <nav id="navbar" class="fixed w-full z-50 py-2 px-4 md:px-6 bg-white shadow-sm">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
@@ -400,13 +412,7 @@
             </div>
         </div>
 
-        <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu"
-            class="mobile-menu fixed inset-0 bg-white z-40 flex flex-col items-center justify-center space-y-8 text-2xl font-bold md:hidden">
-            <a href="#hero" onclick="toggleMobileMenu()" class="hover:text-gray-500">Inicio</a>
-            <a href="#about" onclick="toggleMobileMenu()" class="hover:text-gray-500">Nosotros</a>
-            <a href="catalogo.html" onclick="toggleMobileMenu()" class="hover:text-gray-500">Catálogo</a>
-        </div>
+
     </nav>
 
     <!-- Hero Section - Old Money Minimal -->
@@ -442,6 +448,53 @@
             <a href="#about" class="text-white/40 hover:text-white/80 transition-colors">
                 <i class="fas fa-chevron-down text-xl"></i>
             </a>
+        </div>
+    </section>
+
+    <!-- Materials Section - Clean White -->
+    <section class="py-24 bg-white px-4 md:px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <p class="text-xs uppercase tracking-[0.3em] mb-4 font-medium text-gray-400">Calidad Superior</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Materiales Premium</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-12 text-center reveal">
+                <!-- Algodón -->
+                <div class="space-y-4">
+                    <div class="w-16 h-16 mx-auto bg-gray-50 rounded-full flex items-center justify-center text-2xl">
+                        <i class="fas fa-leaf text-gray-800"></i>
+                    </div>
+                    <h3 class="text-xl font-bold">95% Algodón</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm md:text-base">
+                        Fibra natural suave y transpirable que garantiza frescura y confort durante todo el día.
+                    </p>
+                </div>
+
+                <!-- Elastano -->
+                <div class="space-y-4">
+                    <div class="w-16 h-16 mx-auto bg-gray-50 rounded-full flex items-center justify-center text-2xl">
+                        <i class="fas fa-expand-arrows-alt text-gray-800"></i>
+                    </div>
+                    <h3 class="text-xl font-bold">5% Elastano</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm md:text-base">
+                        Toque de elasticidad para un ajuste perfecto (Slim Fit) que se adapta a tu silueta sin
+                        deformarse.
+                    </p>
+                </div>
+
+                <!-- DTF -->
+                <div class="space-y-4">
+                    <div class="w-16 h-16 mx-auto bg-gray-50 rounded-full flex items-center justify-center text-2xl">
+                        <i class="fas fa-layer-group text-gray-800"></i>
+                    </div>
+                    <h3 class="text-xl font-bold">Estampado DTF</h3>
+                    <p class="text-gray-600 leading-relaxed text-sm md:text-base">
+                        Tecnología <em>Direct to Film</em> de alta definición. Colores vibrantes y resistencia superior
+                        a lavados.
+                    </p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -728,8 +781,17 @@
             const cartTotal = document.getElementById('cart-total');
             const checkoutBtn = document.getElementById('checkout-btn');
 
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            // Filter corrupted items and normalize quantity
+            cart = cart.map(item => ({ ...item, quantity: item.quantity || item.q || 0 }));
+            cart = cart.filter(item => item.price && item.quantity);
+
+            const totalItems = cart.reduce((sum, item) => sum + (parseInt(item.quantity) || 0), 0);
+
+            const totalPrice = cart.reduce((sum, item) => {
+                const price = parseFloat(item.price) || 0;
+                const qty = parseInt(item.quantity) || 0;
+                return sum + (price * qty);
+            }, 0);
 
             if (cartCount) cartCount.textContent = totalItems;
 

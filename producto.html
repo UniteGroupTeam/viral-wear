@@ -69,17 +69,24 @@
     <!-- Navbar Simple -->
     <nav class="fixed w-full top-0 z-50 py-2 px-4 md:px-6 bg-white shadow-sm">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="index.html" class="flex items-center">
-                <img src="LOGO (ICONO PARA LUGARES PEQUEÑOS.png" alt="Viral Wear" class="h-10 w-auto">
-            </a>
-            <div class="flex items-center gap-4">
-                <a href="catalogo.html" class="text-sm font-medium text-gray-600 hover:text-black hidden md:block">
-                    <i class="fas fa-arrow-left mr-2"></i>Catálogo
+            <div class="flex items-center gap-4 md:gap-6">
+                <a href="index.html" class="flex items-center">
+                    <img src="LOGO (ICONO PARA LUGARES PEQUEÑOS.png" alt="Viral Wear" class="h-10 w-auto">
                 </a>
-                <button onclick="toggleCart()" class="relative">
+
+                <!-- Back Button (Visible on all devices) -->
+                <a href="catalogo.html"
+                    class="text-sm font-medium text-gray-600 hover:text-black flex items-center gap-2 border-l pl-4 border-gray-300 h-8">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Catálogo</span>
+                </a>
+            </div>
+
+            <div class="flex items-center">
+                <button onclick="toggleCart()" class="relative p-2">
                     <i class="fas fa-shopping-bag text-xl"></i>
                     <span id="cart-count"
-                        class="absolute -top-1 -right-1 bg-black text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+                        class="absolute top-0 right-0 bg-black text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
                 </button>
             </div>
         </div>
@@ -90,12 +97,19 @@
         <div id="product-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
 
             <!-- Image Section -->
-            <div class="zoom-container rounded-xl overflow-hidden bg-gray-100 aspect-square relative">
-                <img id="p-image" src="" alt="Product Image" class="w-full h-full object-cover">
-                <!-- Promo Badge -->
-                <div id="promo-badge"
-                    class="absolute top-4 left-4 bg-purple-600 text-white px-3 py-1 text-sm font-bold rounded hidden">
-                    +1000 V-Bucks
+            <!-- Image Section -->
+            <div class="flex flex-col gap-4">
+                <div class="zoom-container rounded-xl overflow-hidden bg-gray-100 aspect-square relative">
+                    <img id="p-image" src="" alt="Product Image" class="w-full h-full object-cover">
+                    <!-- Promo Badge -->
+                    <div id="promo-badge"
+                        class="absolute top-4 left-4 bg-purple-600 text-white px-3 py-1 text-sm font-bold rounded hidden">
+                        +1000 V-Bucks
+                    </div>
+                </div>
+                <!-- Thumbnails -->
+                <div id="thumbnails-container" class="grid grid-cols-5 gap-2 hidden">
+                    <!-- Miniatures will be loaded here -->
                 </div>
             </div>
 
@@ -112,6 +126,15 @@
 
                 <!-- Short Description -->
                 <p id="p-desc" class="text-gray-600 mb-6">Descripción del producto.</p>
+
+                <!-- Color Selector -->
+                <div class="mb-6 hidden" id="color-section">
+                    <h3 class="font-semibold mb-3">Color: <span id="selected-color-name"
+                            class="font-normal text-gray-600">Seleccionar</span></h3>
+                    <div class="flex flex-wrap gap-3" id="colors-container">
+                        <!-- Colors loaded via JS -->
+                    </div>
+                </div>
 
                 <!-- Size Selector -->
                 <div class="mb-6">
@@ -181,7 +204,7 @@
                 <!-- Features -->
                 <div class="grid grid-cols-2 gap-3 mt-6 text-sm text-gray-500">
                     <div class="flex items-center gap-2"><i class="fas fa-truck"></i> Envío a todo México</div>
-                    <div class="flex items-center gap-2"><i class="fas fa-shield-alt"></i> Garantía 30 días</div>
+
                     <div class="flex items-center gap-2"><i class="fas fa-leaf"></i> Algodón de calidad</div>
                     <div class="flex items-center gap-2"><i class="fas fa-lock"></i> Pago seguro</div>
                 </div>
@@ -239,14 +262,68 @@
                     ]
                 },
                 care: [
+                    'Lavado en lavadora volteada',
+                    'Planchar a temperatura media (Evitar logo directamente)',
                     'En caso necesario, usar solo lejía sin cloro',
-                    'Planchar a temperatura media',
-                    'Lavado en lavadora a 40°',
                     'Lavar con prendas de color parecido',
                     'Secar colgado',
                     'Se puede limpiar en seco'
                 ],
-                image: 'https://i.imgur.com/oU1pj76.jpeg',
+                image: 'https://imgur.com/GSfoU0R.jpeg',
+                images: [
+                    'https://imgur.com/GSfoU0R.jpeg',
+                    'https://imgur.com/cgSFj4r.jpeg',
+                    'https://imgur.com/LPRZYw9.jpeg'
+                ],
+                colors: [
+                    { name: 'Default Skin White', hex: '#f9fafb', image: 'https://imgur.com/GSfoU0R.jpeg' },
+                    { name: 'Storm Circle Blue', hex: '#1e3a8a', image: 'https://imgur.com/FMabWLe.jpeg' },
+                    { name: 'Loot Llama Purple', hex: '#7c3aed', image: 'https://imgur.com/aXkBI3z.jpeg' },
+                    { name: 'Jonesy Green', hex: '#57534e', image: 'https://imgur.com/DQ8XqZ0.jpeg' } // Caqui oscuro aprox
+                ],
+                isFortnite: true
+            },
+            'fortnite-victory-black': {
+                id: 'fortnite-victory-black',
+                title: 'Sudadera Fortnite "Victory Black"',
+                price: 849,
+                category: 'Fortnite Collection · Premium Hoodie',
+                shortDesc: 'Sudadera de peso medio en French Terry con diseño exclusivo. Corte amplio y silueta generosa para máximo confort y estilo.',
+                fullDesc: 'Sudadera de peso medio en french terry de mezcla de algodón. Gorro forrado en punto con cordón de ajuste, hombros caídos y un bolsillo tipo canguro. Borde acanalado ancho en los puños y bastilla. Corte amplio para una silueta generosa sin necesidad de ser oversized. Interior en tejido peinado suave.',
+                sizes: ['XCH', 'CH', 'M', 'G', 'XG', 'XXG'],
+                materials: {
+                    composition: 'Capa exterior: Algodón 60%, Poliéster 40% · Elástico: Algodón 95%, Elastano 5%',
+                    type: 'French Terry Premium',
+                    printing: 'Estampado Alta Definición',
+                    details: [
+                        { name: 'Algodón', desc: 'Fibra natural suave y versátil.' },
+                        { name: 'Poliéster Reciclado', desc: 'Contiene al menos 9% de poliéster reciclado de textiles para reducir impacto ambiental.' },
+                        { name: 'French Terry', desc: 'Tejido de punto con bucles suaves en el interior y superficie lisa en el exterior.' }
+                    ]
+                },
+                care: [
+                    'Lavado en lavadora volteada',
+                    'Planchar a temperatura media (Evitar logo directamente)',
+                    'Secadora a temperatura media',
+                    'En caso necesario, usar solo lejía sin cloro',
+                    'No limpiar en seco',
+                    'Lavar con prendas de color parecido'
+                ],
+                image: 'https://imgur.com/xtyGCW8.jpeg',
+                images: [
+                    'https://imgur.com/xtyGCW8.jpeg',
+                    'https://imgur.com/eMBQbyt.jpeg',
+                    'https://imgur.com/n8aStnD.jpeg',
+                    'https://imgur.com/MAZUQwl.jpeg',
+                    'https://imgur.com/ng7hOiY.jpeg'
+                ],
+                colors: [
+                    { name: 'Victory Black', hex: '#1a1a1a', image: 'https://imgur.com/xtyGCW8.jpeg' },
+                    { name: 'Metal Wall Grey', hex: '#9ca3af', image: 'https://i.imgur.com/NvmzNFK.jpeg' },
+                    { name: 'Shadow Ops Grey', hex: '#4b5563', image: 'https://i.imgur.com/RUTvItU.jpeg' },
+                    { name: 'Toxic Zone Green', hex: '#15803d', image: 'https://i.imgur.com/E0u2G2Z.jpeg' },
+                    { name: 'Desert Storm', hex: '#e5e7eb', image: 'https://i.imgur.com/0Hen2Fl.jpeg' }
+                ],
                 isFortnite: true
             }
         };
@@ -255,7 +332,8 @@
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id') || 'free-fortnite-tee';
         let currentProduct = products[productId] || products['free-fortnite-tee'];
-        let selectedSize = null; // Must select size first
+        let selectedSize = null;
+        let selectedColor = null; // New state for color
         let quantity = 1;
 
         // Update add button state
@@ -285,8 +363,22 @@
             const p = currentProduct;
 
             // Basic info
-            document.getElementById('p-image').src = p.image;
+            document.getElementById('p-image').src = p.images ? p.images[0] : p.image;
             document.getElementById('p-title').innerText = p.title;
+
+            // Thumbnails Logic
+            const thumbContainer = document.getElementById('thumbnails-container');
+            if (p.images && p.images.length > 1) {
+                thumbContainer.classList.remove('hidden');
+                thumbContainer.innerHTML = p.images.map((img, idx) => `
+                    <div class="cursor-pointer border-2 ${idx === 0 ? 'border-black' : 'border-transparent'} hover:border-gray-400 rounded-lg overflow-hidden h-16 transition"
+                         onclick="changeImage(this, '${img}')">
+                        <img src="${img}" class="w-full h-full object-cover">
+                    </div>
+                `).join('');
+            } else {
+                thumbContainer.classList.add('hidden');
+            }
             document.getElementById('p-price').innerText = `$${p.price.toLocaleString()} MXN`;
             document.getElementById('p-desc').innerText = p.shortDesc;
             document.getElementById('p-category').innerText = p.category;
@@ -295,6 +387,31 @@
             // Promo badge for Fortnite products
             if (p.isFortnite) {
                 document.getElementById('promo-badge').classList.remove('hidden');
+            }
+
+            // Colors Logic
+            const colorSection = document.getElementById('color-section');
+            const colorsContainer = document.getElementById('colors-container');
+
+            if (p.colors && p.colors.length > 0) {
+                colorSection.classList.remove('hidden');
+
+                // Pre-select first color if not selected by default
+                if (!selectedColor) {
+                    selectedColor = p.colors[0];
+                    document.getElementById('selected-color-name').innerText = selectedColor.name;
+                }
+
+                colorsContainer.innerHTML = p.colors.map((c, i) => `
+                    <button class="w-10 h-10 rounded-full border-2 transition hover:scale-110 flex items-center justify-center color-btn ${selectedColor && selectedColor.name === c.name ? 'border-black scale-110 ring-2 ring-offset-1 ring-gray-300' : 'border-gray-200'}"
+                        style="background-color: ${c.hex};"
+                        onclick='selectColor(this, ${JSON.stringify(c)})'
+                        title="${c.name}">
+                    </button>
+                `).join('');
+            } else {
+                colorSection.classList.add('hidden');
+                selectedColor = null;
             }
 
             // Sizes
@@ -332,6 +449,34 @@
             updateAddButtonState();
         }
 
+        function changeImage(element, src) {
+            document.getElementById('p-image').src = src;
+            // Update border classes
+            const container = document.getElementById('thumbnails-container');
+            Array.from(container.children).forEach(child => {
+                child.classList.remove('border-black');
+                child.classList.add('border-transparent');
+            });
+            element.classList.remove('border-transparent');
+            element.classList.add('border-black');
+        }
+
+        function selectColor(btn, colorObj) {
+            selectedColor = colorObj;
+            document.getElementById('selected-color-name').innerText = colorObj.name;
+
+            // Change main image
+            document.getElementById('p-image').src = colorObj.image;
+
+            // Update UI
+            document.querySelectorAll('.color-btn').forEach(b => {
+                b.classList.remove('border-black', 'scale-110', 'ring-2', 'ring-offset-1', 'ring-gray-300');
+                b.classList.add('border-gray-200');
+            });
+            btn.classList.remove('border-gray-200');
+            btn.classList.add('border-black', 'scale-110', 'ring-2', 'ring-offset-1', 'ring-gray-300');
+        }
+
         function selectSize(btn, size) {
             document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
@@ -360,17 +505,20 @@
                 return;
             }
 
-            const existingIndex = cart.findIndex(item => item.name === currentProduct.title && item.size === selectedSize);
+            const productName = selectedColor ? `${currentProduct.title} (${selectedColor.name})` : currentProduct.title;
+            const productImage = selectedColor ? selectedColor.image : (currentProduct.images ? currentProduct.images[0] : currentProduct.image);
+
+            const existingIndex = cart.findIndex(item => item.name === productName && item.size === selectedSize);
 
             if (existingIndex > -1) {
-                cart[existingIndex].q += quantity;
+                cart[existingIndex].quantity = (cart[existingIndex].quantity || 0) + quantity;
             } else {
                 cart.push({
-                    name: currentProduct.title,
+                    name: productName,
                     price: currentProduct.price,
                     size: selectedSize,
-                    q: quantity,
-                    image: currentProduct.image
+                    quantity: quantity,
+                    image: productImage
                 });
             }
 
@@ -380,7 +528,7 @@
             // Button feedback
             const btn = document.getElementById('add-to-cart-btn');
             const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-check"></i> Agregado!';
+            btn.innerHTML = '<i class="fas fa-check"></i> Agregado';
             btn.classList.replace('bg-black', 'bg-green-600');
 
             setTimeout(() => {
@@ -394,10 +542,14 @@
         }
 
         function updateCartUI() {
-            const count = cart.reduce((a, b) => a + b.q, 0);
+            // Normalize
+            cart = cart.map(item => ({ ...item, quantity: item.quantity || item.q || 0 }));
+            cart = cart.filter(item => item.price && item.quantity > 0);
+
+            const count = cart.reduce((a, b) => a + b.quantity, 0);
             document.getElementById('cart-count').innerText = count;
 
-            const total = cart.reduce((a, b) => a + (b.price * b.q), 0);
+            const total = cart.reduce((a, b) => a + (b.price * b.quantity), 0);
             document.getElementById('cart-total').innerText = `$${total.toLocaleString()} MXN`;
 
             const container = document.getElementById('cart-items');
@@ -409,8 +561,8 @@
                         <img src="${item.image || 'https://via.placeholder.com/60'}" class="w-16 h-16 object-cover rounded">
                         <div class="flex-1">
                             <p class="font-medium text-sm">${item.name}</p>
-                            <p class="text-xs text-gray-500">Talla: ${item.size} · x${item.q}</p>
-                            <p class="font-semibold">$${(item.price * item.q).toLocaleString()}</p>
+                            <p class="text-xs text-gray-500">Talla: ${item.size} · x${item.quantity}</p>
+                            <p class="font-semibold">$${(item.price * item.quantity).toLocaleString()}</p>
                         </div>
                         <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 self-start">
                             <i class="fas fa-trash text-sm"></i>
