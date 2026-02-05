@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosotros - Viral Wear</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="LOGO (ICONO PARA LUGARES PEQUEÑOS.png">
+    <link rel="apple-touch-icon" href="LOGO PNG.png">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background-color: #ffffff;
+            color: #1a1a1a;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Navbar & Mobile Menu Styles (From Catalogo) */
+        .mobile-menu {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(100%);
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        /* Cart Badge */
+        .cart-badge {
+            transition: transform 0.2s;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        /* Fade In Animation */
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu"
+        class="mobile-menu fixed inset-0 bg-white z-[60] flex flex-col items-center justify-center space-y-8 text-2xl font-bold md:hidden text-gray-900 shadow-xl">
+        <a href="index.html" onclick="toggleMobileMenu()" class="hover:text-gray-500">Inicio</a>
+        <a href="nosotros.html" onclick="toggleMobileMenu()" class="hover:text-gray-500">Nosotros</a>
+        <a href="catalogo.html" onclick="toggleMobileMenu()" class="hover:text-gray-500">Catálogo</a>
+        <!-- Close Button inside Menu -->
+        <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 p-2">
+            <i class="fas fa-times text-2xl"></i>
+        </button>
+    </div>
+
+    <!-- Navigation Compacto -->
+    <nav class="fixed w-full top-0 z-50 py-2 px-4 md:px-6 bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+
+            <!-- Logo Compacto (Icono) -->
+            <a href="index.html" class="flex items-center">
+                <img src="LOGO (ICONO PARA LUGARES PEQUEÑOS.png" alt="Viral Wear" class="h-10 w-auto object-contain">
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8 items-center text-sm text-gray-900">
+                <a href="index.html"
+                    class="font-medium hover:text-gray-600 transition uppercase tracking-wider">Inicio</a>
+                <a href="nosotros.html"
+                    class="font-medium text-black border-b-2 border-black transition uppercase tracking-wider">Nosotros</a>
+                <a href="catalogo.html"
+                    class="font-medium hover:text-gray-600 transition uppercase tracking-wider">Catálogo</a>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="flex items-center gap-4 text-gray-900">
+                <!-- Shopping Bag (Link to Catalogo/Cart logic) -->
+                <a href="catalogo.html" class="cart-icon-container relative group">
+                    <i class="fas fa-shopping-bag text-xl hover:text-gray-600 transition"></i>
+                </a>
+
+                <!-- Hamburger Button (Mobile Only) -->
+                <button class="md:hidden z-50 relative focus:outline-none" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-bg">
+            <img src="https://i.imgur.com/81YnUVW.png" alt="About Main">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="text-4xl md:text-6xl font-black mb-4 uppercase tracking-tighter fade-in"
+                style="animation-delay: 0.1s">Nuestra Esencia</h1>
+            <p class="text-lg md:text-xl text-gray-200 font-light fade-in" style="animation-delay: 0.3s">Old Money
+                Aesthetic x Gamer Culture</p>
+        </div>
+    </section>
+
+    <!-- Quiénes Somos -->
+    <section class="py-24 px-6 bg-white">
+        <div class="max-w-4xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="fade-in" style="animation-delay: 0.5s">
+                    <h2 class="text-3xl font-bold mb-6">La Fusión Perfecta</h2>
+                    <p class="text-gray-600 mb-4 leading-relaxed font-light text-lg">
+                        Viral Wear nace de una observación simple: los gamers también pueden vestir elegante. Nos
+                        alejamos de los diseños estridentes para crear piezas sofisticadas que rinden homenaje a tus
+                        videojuegos favoritos de una manera sutil y premium.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed font-light text-lg">
+                        Utilizamos materiales de alta calidad como French Terry y algodones peinados, combinados con
+                        técnicas de impresión de última generación.
+                    </p>
+                </div>
+                <!-- Imagen secundaria elegante -->
+                <!-- Imagen carrusel -->
+                <div class="relative h-96 rounded-2xl overflow-hidden shadow-2xl fade-in" style="animation-delay: 0.7s">
+                    <div id="about-slideshow" class="w-full h-full relative">
+                        <img src="https://i.imgur.com/lcjhNqy.jpeg"
+                            class="slide-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-100"
+                            alt="Viral Wear Lifestyle">
+                        <img src="https://i.imgur.com/zp0jxtm.jpeg"
+                            class="slide-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0"
+                            alt="Viral Wear Detail">
+                        <img src="https://i.imgur.com/NoeYpDK.jpeg"
+                            class="slide-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0"
+                            alt="Viral Wear Mood">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cuidados de las Prendas -->
+    <section class="py-24 px-6 bg-gray-50 border-t border-gray-100">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">Cuidados Premium</h2>
+                <p class="text-gray-500 font-light">Mantén tu colección como nueva siguiendo estos consejos expertos.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div
+                    class="bg-white p-10 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 text-center group">
+                    <div
+                        class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl group-hover:bg-black group-hover:text-white transition-colors">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-3 uppercase tracking-wider">Lavado Inteligente</h3>
+                    <p class="text-sm text-gray-600 font-light leading-relaxed">
+                        Siempre lava tus prendas <strong>volteadas</strong> (revés hacia afuera). Utiliza agua fría y
+                        evita blanqueadores agresivos para proteger el estampado.
+                    </p>
+                </div>
+                <!-- Card 2 -->
+                <div
+                    class="bg-white p-10 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 text-center group">
+                    <div
+                        class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl group-hover:bg-black group-hover:text-white transition-colors">
+                        <i class="fas fa-temperature-low"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-3 uppercase tracking-wider">Planchado Cauteloso</h3>
+                    <p class="text-sm text-gray-600 font-light leading-relaxed">
+                        Plancha a temperatura media y <strong>nunca directamente sobre el logo</strong>. Usa un paño
+                        protector si es necesario.
+                    </p>
+                </div>
+                <!-- Card 3 -->
+                <div
+                    class="bg-white p-10 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 text-center group">
+                    <div
+                        class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl group-hover:bg-black group-hover:text-white transition-colors">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-3 uppercase tracking-wider">Secado</h3>
+                    <p class="text-sm text-gray-600 font-light leading-relaxed">
+                        Recomendamos secar colgado o en secadora a temperatura media para preservar la integridad de las
+                        fibras y el ajuste perfecto.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Envíos y Cotizaciones -->
+    <section class="py-24 px-6 bg-white border-t border-gray-100">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Envíos y Entregas</h2>
+                <p class="text-gray-500">Todo lo que necesitas saber sobre tu pedido.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100 space-y-6">
+                    <div class="flex gap-4 items-start">
+                        <div
+                            class="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                            1</div>
+                        <div>
+                            <h4 class="font-bold text-lg">Cotización Dinámica</h4>
+                            <p class="text-gray-600 mt-2 text-sm leading-relaxed">
+                                El costo de envío se calcula automáticamente al momento del checkout basado en tu
+                                ubicación exacta. Realizamos envíos seguros a toda la República Mexicana.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 items-start">
+                        <div
+                            class="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                            2</div>
+                        <div>
+                            <h4 class="font-bold text-lg">Tiempos de Entrega</h4>
+                            <p class="text-gray-600 mt-2 text-sm leading-relaxed">
+                                <strong>Estándar:</strong> 3-5 días hábiles.<br>
+                                <strong>Express:</strong> 1-2 días hábiles (según disponibilidad).
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 items-start">
+                        <div
+                            class="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                            3</div>
+                        <div>
+                            <h4 class="font-bold text-lg">Seguimiento</h4>
+                            <p class="text-gray-600 mt-2 text-sm leading-relaxed">
+                                Recibirás un número de guía vía WhatsApp o correo electrónico una vez que tu pedido haya
+                                sido procesado.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contacto WhatsApp -->
+                <div class="flex flex-col justify-center items-center text-center p-8 bg-black text-white rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-4">¿Dudas o Consultas?</h3>
+                    <p class="text-gray-400 mb-8 max-w-xs mx-auto">
+                        Si quieres ver una prenda desde otro ángulo o tienes preguntas específicas, contáctame.
+                    </p>
+                    <a href="https://wa.me/521234567890" target="_blank"
+                        class="inline-flex items-center gap-3 bg-white text-black hover:bg-gray-200 px-8 py-4 rounded-full font-bold transition-all transform hover:scale-105 shadow-lg">
+                        <i class="fab fa-whatsapp text-2xl text-green-600"></i>
+                        <span>Contactar por WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-16 px-6 border-t border-gray-900">
+        <div
+            class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12 text-center md:text-left mb-12">
+            <div>
+                <h4 class="text-2xl font-black uppercase tracking-tighter mb-4">ViralWear.</h4>
+                <p class="text-gray-500 text-sm mb-4">Luxury Gaming Apparel</p>
+                <div class="flex gap-6 text-sm text-gray-400 justify-center md:justify-start">
+                    <a href="nosotros.html" class="hover:text-white transition">Nosotros</a>
+                    <a href="catalogo.html" class="hover:text-white transition">Colección</a>
+                    <a href="https://www.instagram.com/viral_wear_official/" target="_blank"
+                        class="hover:text-white transition">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                    <a href="https://wa.me/521234567890" target="_blank"
+                        class="hover:text-white transition">Contacto</a>
+                </div>
+            </div>
+
+            <div class="max-w-md text-gray-500 text-xs leading-relaxed space-y-4">
+                <p>
+                    <strong>Nota Legal:</strong> Viral Wear no está afiliada, respaldada ni patrocinada por Epic Games,
+                    Riot Games, ni ninguna otra desarrolladora de videojuegos. Todas las imágenes, nombres y personajes
+                    son propiedad intelectual de sus respectivos dueños y se utilizan únicamente con fines artísticos y
+                    de tributo (Fair Use).
+                </p>
+                <p>
+                    Este es un proyecto emprendedor creado por un adolescente apasionado por el gaming y la moda,
+                    buscando compartir diseños únicos con el mundo.
+                </p>
+                <p>© 2024 Viral Wear Inc.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Funcionalidad de Menú Móvil
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('open');
+            document.body.classList.toggle('overflow-hidden');
+        }
+
+        // Slideshow Automático
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide-img');
+            let currentSlide = 0;
+
+            if (slides.length > 0) {
+                setInterval(() => {
+                    // Ocultar actual
+                    slides[currentSlide].classList.remove('opacity-100');
+                    slides[currentSlide].classList.add('opacity-0');
+
+                    // Calcular siguiente
+                    currentSlide = (currentSlide + 1) % slides.length;
+
+                    // Mostrar siguiente
+                    slides[currentSlide].classList.remove('opacity-0');
+                    slides[currentSlide].classList.add('opacity-100');
+                }, 4000); // 4 segundos
+            }
+        });
+    </script>
+</body>
+
+</html>
